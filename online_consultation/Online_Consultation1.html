@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI中医药在线问诊与医药图谱</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script> <!-- 引入Fuse.js库 -->
+    <script src="script.js" defer></script>
+    <!-- 引入Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入图标库（Font Awesome） -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #6B8E23;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .navbar .links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+        }
+
+        /* 主要内容样式 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #777;
+        }
+
+        /* 输入和按钮样式 */
+        .symptom-input-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .symptom-input-container input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .symptom-input-container button {
+            background-color: #06d8ae;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .symptom-input-container button:hover {
+            background-color: #556B2F;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="title">AI判断问诊</div>
+        <div class="links">
+            <a href="Online_Consultation.html">在线问诊</a>
+            
+            <a href="/Chinese-Medicine-World/home/home.html">返回首页</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>AI中医药在线问诊系统</h1>
+            <nav>
+                <ul>
+                    <li><a href="Online_Consultation1.html">AI问诊</a></li>
+                    <li><a href="#medicine-map">医药图谱</a></li>
+                    <li><a href="#history">问诊历史</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section id="consultation" class="question-form">
+                <h2>请描述您的症状</h2>
+                <div class="symptom-input-container">
+                    <input type="text" id="symptomInput" placeholder="例如：头痛，发烧，咳嗽...（输入完症状点击右边的添加）" aria-label="症状输入">
+                    <button id="addSymptom"><i class="fas fa-plus"></i> 添加</button>
+                </div>
+                <div id="symptomTags" class="symptom-tags"></div>
+                <div class="form-buttons">
+                    <button id="submitSymptom"><i class="fas fa-paper-plane"></i> 提交问诊</button>
+                    <button id="clearSymptoms"><i class="fas fa-trash-alt"></i> 清除所有</button>
+                </div>
+                <div id="loading" class="loading" style="display:none;">
+                    <i class="fas fa-spinner fa-spin"></i> 正在分析...
+                </div>
+            </section>
+            <section id="medicine-map" class="medicine-map" style="display:none;">
+                <h2>医药图谱推荐</h2>
+                <div id="medicineList"></div>
+            </section>
+            <section id="history" class="history" style="display:none;">
+                <h2>问诊历史记录</h2>
+                <div id="historyList"></div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2025 中医药在线问诊系统. 版权所有.</p>
+        </footer>
+    </div>
+
+    <!-- 药品详情模态框 -->
+    <div id="medicineModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modalMedicineName">药品名称</h2>
+            <p><strong>功效：</strong><span id="modalEfficacy">功效内容</span></p>
+            <p><strong>用法：</strong><span id="modalUsage">用法内容</span></p>
+            <p><strong>副作用：</strong><span id="modalSideEffects">副作用内容</span></p>
+        </div>
+    </div>
+</body>
+</html>

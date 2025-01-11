@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医百科知识检索工具</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #6B8E23;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+        }
+
+        /* 搜索框样式 */
+        .search-container {
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-container button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            background-color: #6B8E23;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #556B2F;
+        }
+
+        /* 主容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        /* 内容部分样式 */
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #6B8E23;
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .section ul li {
+            background: #f0f0f0;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .section ul li:hover {
+            background-color: #e6e6e6;
+        }
+
+        .section ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .section ul li a:hover {
+            color: #6B8E23;
+        }
+
+        /* 提示信息样式 */
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .section ul li:hover .tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div>中医百科知识检索</div>
+        <div>
+            <a href="../home/home.html">返回首页</a>
+        </div>
+    </nav>
+
+    <!-- 搜索框 -->
+    <div class="search-container">
+        <input type="text" placeholder="输入关键词搜索中医知识...">
+        <button>搜索</button>
+    </div>
+
+    <!-- 主体内容 -->
+    <div class="container">
+        <h1>中医百科知识检索</h1>
+
+        <div class="section">
+            <h2>中药材知识</h2>
+            <ul>
+                <li>
+                    <a href="#">中药材分类</a>
+                    <div class="tooltip">根据功效将中药材分为解表药、补益药等类别。</div>
+                </li>
+                <li>
+                    <a href="#">常用中药材图鉴</a>
+                    <div class="tooltip">详细介绍如人参、当归、黄芪等中药材的图片与功效。</div>
+                </li>
+                <li>
+                    <a href="#">中药材采集与保存</a>
+                    <div class="tooltip">学习季节、采收方法及保存技巧。</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>经典方剂解析</h2>
+            <ul>
+                <li>
+                    <a href="#">四君子汤</a>
+                    <div class="tooltip">益气健脾，用于脾胃虚弱。</div>
+                </li>
+                <li>
+                    <a href="#">桂枝汤</a>
+                    <div class="tooltip">解表散寒，常用于感冒初期。</div>
+                </li>
+                <li>
+                    <a href="#">补中益气汤</a>
+                    <div class="tooltip">补益中气、升阳举陷。</div>
+                </li>
+                <li>
+                    <a href="#">更多经典方剂</a>
+                    <div class="tooltip">涵盖更多方剂如逍遥散、玉屏风散。</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>中医治疗方法</h2>
+            <ul>
+                <li>
+                    <a href="#">常见病症列表</a>
+                    <div class="tooltip">如感冒、咳嗽、失眠等病症的中医解决方法。</div>
+                </li>
+                <li>
+                    <a href="#">中医辩证施治方法</a>
+                    <div class="tooltip">基于八纲辩证理论制定个性化治疗方案。</div>
+                </li>
+                <li>
+                    <a href="#">穴位按摩与针灸</a>
+                    <div class="tooltip">常见穴位如合谷、内关的作用与操作方法。</div>
+                </li>
+                <li>
+                    <a href="#">食疗与调养</a>
+                    <div class="tooltip">通过饮食调整健康状态，如山药粥健脾。</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>健康评估与养生方案</h2>
+            <ul>
+                <li>
+                    <a href="#">体质评估工具</a>
+                    <div class="tooltip">根据九种体质理论了解自身健康状态。</div>
+                </li>
+                <li>
+                    <a href="#">健康档案与个性化建议</a>
+                    <div class="tooltip">创建健康记录并获取专业建议。</div>
+                </li>
+                <li>
+                    <a href="#">日常养生方案</a>
+                    <div class="tooltip">如春季疏肝、冬季补肾的养生方法。</div>
+                </li>
+                <li>
+                    <a href="#">季节性调养指导</a>
+                    <div class="tooltip">根据四季变化调整饮食起居。</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

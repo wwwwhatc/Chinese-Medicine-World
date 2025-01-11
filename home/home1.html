@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中医药主题首页 - 游客页面</title>
+    <style>
+        /* 基本样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #F0FFF0, #E6E6FA);
+            color: #333;
+            position: relative;
+            overflow: auto; /* 防止粒子动画溢出 */
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #6B8E23;
+            padding: 0.5rem 1rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        .navbar .menu {
+            display: flex;
+            flex-wrap: nowrap; /* 防止菜单换行 */
+            gap: 1rem;
+            flex: 1; /* 让菜单占据剩余空间 */
+            margin-right: 1rem; /* 与账户信息之间留出空间 */
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            white-space: nowrap; /* 防止文本换行 */
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .auth-links {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .auth-links a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 横幅样式 */
+        .banner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            background: url('img/herb2.jpg') no-repeat center center/cover;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            margin-top: 60px; /* 确保内容不被导航栏遮挡 */
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner h1, .banner p {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: bannerFadeIn 1s forwards;
+        }
+        .banner h1 {
+            animation-delay: 0.5s;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .banner p {
+            animation-delay: 1s;
+            font-size: 1.2rem;
+        }
+
+        @keyframes bannerFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 功能区样式 */
+        .features {
+            text-align: center;
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .features.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .features .feature-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 300px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background-color: #6B8E23;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        /* 返回顶部按钮样式 */
+        #backToTop {
+            display: none; /* 初始隐藏 */
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 100;
+            font-size: 2rem;
+            background-color: #38471e;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #backToTop:hover {
+            background-color: #556B2F;
+            transform: scale(1.1);
+        }
+
+        /* 粒子背景样式 */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 确保粒子在最底层 */
+            background: transparent; /* 保持原有背景 */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="menu">
+            <!-- 已移除“个人中心”链接 -->
+            <a href="../encyclopedia/EncycLopedia.html">中医百科</a>
+            <a href="../health_evaluation/Health_Evaluation.html">健康评估与方案</a>
+            <a href="../store/Store.html">中医商城</a>
+            <a href="../articles_videos/Articles_Videos.html">科普文章/视频</a>
+            <a href="../community/Cmmunity.html">社区互动</a>
+            <a href="../contact_us/Contact_Us.html">联系我们</a>
+        </div>
+        <div class="auth-links">
+            <a href="../login/Login.html">登录</a>
+            <a href="../register/Register.html">注册</a>
+        </div>
+    </nav>
+
+    <!-- 粒子背景画布 -->
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="banner">
+        <h1>欢迎来到中医药健康平台</h1>
+        <p>探索传统中医的智慧，开启健康生活之旅。</p>
+    </div>
+
+    <div class="features fade-in">
+        <h2>热门功能</h2>
+        <div class="feature-cards">
+            <div class="feature-card">
+                <h3>健康评估</h3>
+                <p>通过科学方法了解您的健康状态，获取个性化健康方案。</p>
+            </div>
+            <div class="feature-card">
+                <h3>AI在线问诊</h3>
+                <p>强力推荐！引入智能中医AI大模型，快速获取健康建议与疾病诊断方法！！！。</p>
+            </div>
+            <div class="feature-card">
+                <h3>中医百科</h3>
+                <p>学习中医药知识，了解中药材和经典方剂。</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 中医药健康平台 | 传承中医文化，关爱全民健康</p>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" title="返回顶部">↑</button>
+
+    <script>
+        // 返回顶部按钮功能
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // 滚动超过300px时显示按钮
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 滚动触发动画
+        document.addEventListener('DOMContentLoaded', () => {
+            const faders = document.querySelectorAll('.fade-in');
+
+            const appearOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll){
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('visible');
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+
+        // 粒子动画实现
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray;
+        const numberOfParticles = 100;
+        const colors = ['#6B8E23', '#556B2F', '#8FBC8F'];
+
+        // 调整画布大小
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 粒子类
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // 边界处理，反弹效果
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.speedX *= -1;
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.speedY *= -1;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 初始化粒子
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        // 动画循环
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let particle of particlesArray) {
+                particle.update();
+                particle.draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线问诊平台</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        body {
+            background-color: #f7f9fc;
+            color: #333;
+        }
+        .sidebar {
+            min-height: 100vh;
+        }
+        .sidebar .nav-link.active {
+            background-color: #556B2F;
+            color: white;
+        }
+        .doctor-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .modal-header .close {
+            border: none;
+            background: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- 侧边栏 -->
+        <nav class="sidebar bg-success text-white p-4 flex-shrink-0">
+            <div class="mb-4 text-center fs-4 fw-bold">在线问诊</div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="Online_Consultation1.html" class="nav-link text-white" aria-current="page">
+                        AI智能问诊
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#doctor-section" class="nav-link text-white">
+                        选择医生
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#records-section" class="nav-link text-white">
+                        预约记录
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Chinese-Medicine-World/home/home.html" class="nav-link text-white">
+                        返回首页
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <div class="flex-grow-1 p-4">
+            <!-- 主头部 -->
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h1 class="mb-3">欢迎使用在线问诊平台</h1>
+                <div class="position-relative">
+                    <input type="text" id="search-input" class="form-control rounded-pill" placeholder="搜索医生或科室...">
+                    <span class="position-absolute top-50 end-0 translate-middle-y me-3">🔍</span>
+                </div>
+            </div>
+
+            <!-- 医生列表 -->
+            <section id="doctor-section" class="mb-5">
+                <h2 class="mb-4 text-center">选择医生</h2>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <!-- 医生卡片示例 -->
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor1.jpg" class="card-img-top mx-auto mt-3" alt="李医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">李医生</h5>
+                                <p class="card-text">中医内科专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 其他医生卡片... -->
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor2.jpg" class="card-img-top mx-auto mt-3" alt="王医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">王医生</h5>
+                                <p class="card-text">针灸与推拿专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor3.jpg" class="card-img-top mx-auto mt-3" alt="赵医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">赵医生</h5>
+                                <p class="card-text">中医妇科专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 新增医生卡片 -->
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor4.jpg" class="card-img-top mx-auto mt-3" alt="孙医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">孙医生</h5>
+                                <p class="card-text">中医儿科专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor5.jpg" class="card-img-top mx-auto mt-3" alt="周医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">周医生</h5>
+                                <p class="card-text">中医骨科专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card doctor-card h-100 text-center">
+                            <img src="img/doctor6.jpg
+                            " class="card-img-top mx-auto mt-3" alt="吴医生" style="width:100px; height:100px;">
+                            <div class="card-body">
+                                <h5 class="card-title">吴医生</h5>
+                                <p class="card-text">中医皮肤科专家</p>
+                                <button class="btn btn-success reserve-btn">预约</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 可以根据需要继续添加更多医生卡片 -->
+                </div>
+            </section>
+
+            <!-- 预约记录 -->
+            <section id="records-section" class="mb-5">
+                <h2 class="mb-4 text-center">预约记录</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="records-table">
+                        <thead class="table-success">
+                            <tr>
+                                <th scope="col">日期</th>
+                                <th scope="col">医生</th>
+                                <th scope="col">科室</th>
+                                <th scope="col">状态</th>
+                                <th scope="col">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 预约记录将动态添加到这里 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- 预约模态窗口 -->
+        <div class="modal fade" id="reserve-modal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reserveModalLabel">预约医生</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reserve-form">
+                            <div class="mb-3">
+                                <label for="doctor-name" class="form-label">医生姓名:</label>
+                                <input type="text" id="doctor-name" name="doctor-name" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="appointment-date" class="form-label">预约日期:</label>
+                                <input type="date" id="appointment-date" name="appointment-date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">确认预约</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编辑模态窗口 -->
+        <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">编辑预约</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-form">
+                            <div class="mb-3">
+                                <label for="edit-date" class="form-label">预约日期:</label>
+                                <input type="date" id="edit-date" name="edit-date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">保存修改</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS 和依赖项（Popper） -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- JavaScript 实现预约与删除功能 -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const reserveButtons = document.querySelectorAll('.reserve-btn');
+                const recordsTableBody = document.querySelector('#records-table tbody');
+                const reserveModal = new bootstrap.Modal(document.getElementById('reserve-modal'));
+                const editModal = new bootstrap.Modal(document.getElementById('edit-modal'));
+                const reserveForm = document.getElementById('reserve-form');
+                const editForm = document.getElementById('edit-form');
+                const doctorNameInput = document.getElementById('doctor-name');
+                const appointmentDateInput = document.getElementById('appointment-date');
+                const editDateInput = document.getElementById('edit-date');
+                let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+                let currentEditIndex = null;
+
+                // 加载预约记录（从 localStorage）
+                appointments.forEach(app => addAppointmentToTable(app, false));
+                updateAppointmentStatus();
+
+                // 绑定预约按钮事件
+                reserveButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const doctorCard = button.closest('.doctor-card');
+                        const doctorName = doctorCard.querySelector('.card-title').textContent;
+                        const department = doctorCard.querySelector('.card-text').textContent;
+
+                        // 打开预约模态窗口
+                        doctorNameInput.value = doctorName;
+                        appointmentDateInput.value = '';
+                        reserveModal.show();
+                    });
+                });
+
+                // 预约表单提交事件
+                reserveForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const doctorName = doctorNameInput.value.trim();
+                    const department = getDepartmentByDoctorName(doctorName);
+                    const date = appointmentDateInput.value;
+
+                    if (!date) {
+                        alert('请选择预约日期。');
+                        return;
+                    }
+
+                    const selectedDate = new Date(date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (selectedDate < today) {
+                        alert('预约日期必须是今天或未来的日期。');
+                        return;
+                    }
+
+                    // 检查是否已有重复预约
+                    const duplicate = appointments.some(app => app.doctor === doctorName && app.date === date);
+                    if (duplicate) {
+                        alert('您已经在这一天预约了该医生。');
+                        return;
+                    }
+
+                    // 创建预约对象
+                    const appointment = {
+                        date,
+                        doctor: doctorName,
+                        department,
+                        status: '待确认'
+                    };
+
+                    // 添加到预约记录数组
+                    appointments.push(appointment);
+                    // 保存到 localStorage
+                    localStorage.setItem('appointments', JSON.stringify(appointments));
+                    // 添加到表格
+                    addAppointmentToTable(appointment, true);
+
+                    // 关闭模态窗口
+                    reserveModal.hide();
+                });
+
+                // 编辑表单提交事件
+                editForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newDate = editDateInput.value;
+
+                    if (!newDate) {
+                        alert('请选择预约日期。');
+                        return;
+                    }
+
+                    const selectedDate = new Date(newDate);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (selectedDate < today) {
+                        alert('预约日期必须是今天或未来的日期。');
+                        return;
+                    }
+
+                    const appointment = appointments[currentEditIndex];
+                    // 检查是否已有重复预约
+                    const duplicate = appointments.some((app, index) => app.doctor === appointment.doctor && app.date === newDate && index !== currentEditIndex);
+                    if (duplicate) {
+                        alert('您已经在这一天预约了该医生。');
+                        return;
+                    }
+
+                    // 更新预约日期
+                    appointment.date = newDate;
+
+                    // 更新 localStorage
+                    localStorage.setItem('appointments', JSON.stringify(appointments));
+
+                    // 更新表格
+                    updateTableRow(currentEditIndex, appointment);
+
+                    // 关闭模态窗口
+                    editModal.hide();
+                });
+
+                // 函数：获取科室信息通过医生姓名
+                function getDepartmentByDoctorName(name) {
+                    const card = document.querySelector(`.doctor-card .card-title[text="${name}"]`);
+                    const cardElement = Array.from(document.querySelectorAll('.doctor-card')).find(card => card.querySelector('.card-title').textContent === name);
+                    return cardElement ? cardElement.querySelector('.card-text').textContent : '';
+                }
+
+                // 函数：添加预约到表格
+                function addAppointmentToTable(appointment, saveToLocal = true) {
+                    const tr = document.createElement('tr');
+
+                    const tdDate = document.createElement('td');
+                    tdDate.textContent = appointment.date;
+                    tr.appendChild(tdDate);
+
+                    const tdDoctor = document.createElement('td');
+                    tdDoctor.textContent = appointment.doctor;
+                    tr.appendChild(tdDoctor);
+
+                    const tdDepartment = document.createElement('td');
+                    tdDepartment.textContent = appointment.department;
+                    tr.appendChild(tdDepartment);
+
+                    const tdStatus = document.createElement('td');
+                    tdStatus.textContent = appointment.status;
+                    tr.appendChild(tdStatus);
+
+                    const tdAction = document.createElement('td');
+
+                    // 编辑按钮
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = '编辑';
+                    editBtn.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
+                    editBtn.addEventListener('click', () => {
+                        currentEditIndex = appointments.indexOf(appointment);
+                        editDateInput.value = appointment.date;
+                        editModal.show();
+                    });
+                    tdAction.appendChild(editBtn);
+
+                    // 删除按钮
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = '删除';
+                    deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm');
+                    deleteBtn.addEventListener('click', () => {
+                        if (confirm('确定要删除这条预约记录吗？')) {
+                            // 移除预约记录
+                            recordsTableBody.removeChild(tr);
+                            // 更新 appointments 数组
+                            appointments = appointments.filter(app => !(app.date === appointment.date && app.doctor === appointment.doctor));
+                            // 更新 localStorage
+                            localStorage.setItem('appointments', JSON.stringify(appointments));
+                        }
+                    });
+                    tdAction.appendChild(deleteBtn);
+
+                    tr.appendChild(tdAction);
+
+                    recordsTableBody.appendChild(tr);
+                }
+
+                // 函数：更新表格行
+                function updateTableRow(index, appointment) {
+                    const tr = recordsTableBody.children[index];
+                    if (tr) {
+                        tr.children[0].textContent = appointment.date;
+                        tr.children[1].textContent = appointment.doctor;
+                        tr.children[2].textContent = appointment.department;
+                        tr.children[3].textContent = appointment.status;
+                    }
+                }
+
+                // 函数：更新预约状态
+                function updateAppointmentStatus() {
+                    const today = new Date().toISOString().split('T')[0];
+                    appointments.forEach((app, index) => {
+                        if (app.date < today && app.status === '待确认') {
+                            app.status = '已完成';
+                            updateTableRow(index, app);
+                        }
+                    });
+                    localStorage.setItem('appointments', JSON.stringify(appointments));
+                }
+
+                // 搜索功能（带防抖）
+                const searchInput = document.getElementById('search-input');
+                let debounceTimeout;
+                searchInput.addEventListener('input', () => {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(() => {
+                        const query = searchInput.value.toLowerCase();
+                        const doctorCards = document.querySelectorAll('.doctor-card');
+                        doctorCards.forEach(card => {
+                            const name = card.querySelector('.card-title').textContent.toLowerCase();
+                            const department = card.querySelector('.card-text').textContent.toLowerCase();
+                            if (name.includes(query) || department.includes(query)) {
+                                card.parentElement.style.display = 'block';
+                            } else {
+                                card.parentElement.style.display = 'none';
+                            }
+                        });
+                    }, 300);
+                });
+            });
+        </script>
+    </body>
+</html>

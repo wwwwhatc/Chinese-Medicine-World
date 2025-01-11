@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>中药欢迎页</title>
+    <style>
+        /* 全局样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            /* 定义CSS变量用于统一配色 */
+            --primary-color: #6B8E23; /* 橄榄绿 */
+            --secondary-color: #CD853F; /* 秘鲁色 */
+            --accent-color: #8B4513; /* 棕色 */
+            --background-gradient: linear-gradient(135deg, #fdf6e3, #b2bebb);
+            --text-color: #333;
+            --button-color: #CD853F;
+            --button-hover-color: #A0522D;
+            --header-background: rgba(255, 255, 255, 0.9);
+            --header-scrolled-background: rgba(255, 255, 255, 1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --shadow-hover-color: rgba(0, 0, 0, 0.2);
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-family-serif: 'KaiTi', serif;
+        }
+        body {
+            font-family: var(--font-family);
+            background: var(--background-gradient);
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* 背景粒子特效 */
+        #backgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 确保在所有内容的后面 */
+            pointer-events: none; /* 允许点击穿透 */
+        }
+        /* 头部样式 */
+        header {
+            background: var(--header-background);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        header.scrolled {
+            background: var(--header-scrolled-background);
+            box-shadow: 0 4px 8px var(--shadow-hover-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        header h1 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+        .btn-login, .login-button {
+            background: var(--button-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 1em;
+            transition: background 0.3s, transform 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-login:hover, .login-button:hover {
+            background: var(--button-hover-color);
+            transform: translateY(-2px);
+        }
+
+        /* 轮播图样式 */
+        .carousel {
+            position: relative;
+            max-width: 100%;
+            height: 500px;
+            margin-top: 60px; /* 头部高度 */
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            /* 初始宽度将通过JavaScript动态设置 */
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
+        }
+        .slides img {
+            width: 100%; /* 初始宽度将通过JavaScript动态设置 */
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(107, 142, 35, 0.7); /* 橄榄绿半透明 */
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5em;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .prev:hover, .next:hover {
+            background: var(--primary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+        .prev {
+            left: 30px;
+        }
+        .next {
+            right: 30px;
+        }
+        .dots {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .dot {
+            display: inline-block;
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 1.5s ease-in-out;
+            position: relative;
+            z-index: 1; /* 确保内容在粒子前面 */
+            text-align: center; /* 中央对齐 */
+        }
+        .content h2, .content h3, .content h1, .content h4 {
+            color: var(--primary-color);
+        }
+        .content h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2em;
+            position: relative;
+        }
+        .content h2::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+        .content h1 {
+            font-family: var(--font-family-serif);
+            color: var(--accent-color);
+            text-align: center;
+            margin-top: 20px;
+            font-size: 5em; /* 增大字体 */
+        }
+        .content p {
+            font-family: var(--font-family-serif);
+            color: #555;
+            font-size: 1.5em; /* 增大字体 */
+            text-align: center;
+            margin: 20px 0;
+        }
+        .btn-login {
+            background-color: var(--button-color);
+            border-radius: 10px;
+            font-family: var(--font-family-serif);
+            font-size: 1.8em; /* 增大字体 */
+            margin: 25px auto;
+            width: 250px; /* 增大按钮宽度 */
+            padding: 20px 0; /* 增大按钮高度 */
+        }
+
+        .medicine {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .medicine-item {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            width: calc(50% - 20px);
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .medicine-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px var(--shadow-hover-color);
+        }
+        .medicine-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        .medicine-item div {
+            flex: 1;
+            text-align: left; /* 左对齐内容 */
+        }
+        .medicine-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .medicine-item p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* 新增内容区域样式 */
+        .additional-content {
+            margin-top: 60px;
+        }
+        .section {
+            margin-bottom: 60px;
+        }
+        /* 新增的 content-block 类，赋予与 medicine-item 相同的样式 */
+        .content-block {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left; /* 左对齐内容 */
+        }
+        .content-block:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px var(--shadow-hover-color);
+        }
+        .content-block h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .content-block p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .content-block ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* 互动问答样式 */
+        .faq {
+            margin-top: 40px;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: left; /* 左对齐内容 */
+        }
+        .faq-item:hover {
+            background: #f0f0f0;
+        }
+        .faq-item h4 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .faq-item p {
+            margin-top: 10px;
+            display: none;
+            color: #555;
+        }
+        .faq-item.active p {
+            display: block;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .medicine-item {
+                width: calc(50% - 20px);
+            }
+        }
+        @media (max-width: 768px) {
+            header .nav {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+            header h1 {
+                margin-bottom: 10px;
+            }
+            .login-button, .btn-login {
+                margin-top: 10px;
+            }
+            .carousel {
+                height: 300px;
+            }
+            .medicine-item {
+                width: 100%;
+            }
+            .content-block {
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .slides img {
+                object-position: center;
+            }
+            .prev, .next {
+                padding: 10px;
+                font-size: 1.2em;
+            }
+            .medicine-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .medicine-item img {
+                margin-bottom: 15px;
+                margin-right: 0;
+                width: 100%;
+                height: auto;
+            }
+            .content h1 {
+                font-size: 2.5em; /* 适当缩小以适应小屏幕 */
+            }
+            .content p {
+                font-size: 1.2em;
+            }
+            .btn-login {
+                width: 150px;
+                font-size: 1em;
+                padding: 12px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 背景粒子特效 -->
+    <canvas id="backgroundCanvas"></canvas>
+
+    <!-- 头部导航 -->
+    <header id="header">
+        <div class="container nav">
+            <h1>中医药世界</h1>
+            <button class="login-button" onclick="location.href='/Chinese-Medicine-World/Login/login.html'">登录</button>
+        </div>
+    </header>
+
+    <!-- 轮播图 -->
+    <div class="carousel" id="carousel">
+        <div class="slides" id="slides">
+            <!-- 添加轮播图图片 -->
+            <img src="images1/中药展示.jpg" alt="中药材1"> <!-- 第一张展示图片 -->
+            <img src="images1/中药展示2.jpg" alt="中药材2"> <!-- 第二张展示图片 -->
+            <img src="images1/中药展示3.jpg" alt="中药材3"> <!-- 第三张展示图片 -->
+        </div>
+        <button class="prev" onclick="prevSlide()">&#10094;</button>
+        <button class="next" onclick="nextSlide()">&#10095;</button>
+        <div class="dots" id="dots">
+            <span class="dot active" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+        </div>
+    </div>
+
+    <!-- 欢迎标题和描述 -->
+    <div class="content">
+        <h1>欢迎来到中医天地</h1>
+        <p>传承中华智慧，养生保健之道</p>
+        <a class="btn-login" href="../Login/login.html">立即登录</a>
+
+
+        <br><br><br><br>
+        <!-- 中医药常识 -->
+        <h2>中医药常识</h2>
+        <div class="medicine">
+            <div class="medicine-item">
+                <img src="img(2)/人参.png" alt="人参">
+                <div>
+                    <h3>人参</h3>
+                    <p>人参具有补气养血、增强免疫力的功效，常用于体虚乏力、免疫力低下等症状。</p>
+                </div>
+            </div>
+            <div class="medicine-item">
+                <img src="img(2)/生姜.jpg" alt="生姜">
+                <div>
+                    <h3>生姜</h3>
+                    <p>生姜温中散寒，助消化，常用于治疗胃寒呕吐、食欲不振等症状。</p>
+                </div>
+            </div>
+            <div class="medicine-item">
+                <img src="img(2)/枸杞.png" alt="枸杞">
+                <div>
+                    <h3>枸杞</h3>
+                    <p>枸杞滋补肝肾，明目，常用于视力模糊、肝肾不足等情况。</p>
+                </div>
+            </div>
+            <div class="medicine-item">
+                <img src="img(2)/蜂蜜.jpg" alt="蜂蜜">
+                <div>
+                    <h3>蜂蜜</h3>
+                    <p>蜂蜜润肺止咳，缓和药性，常用于咳嗽、便秘等症状。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增内容开始 -->
+        <div class="additional-content">
+            <!-- 中医药概述 -->
+            <div class="section content-block">
+                <h3>中医药概述</h3>
+                <p>中医药是中国传统医学的重要组成部分，已有数千年的历史。它通过整体观念和辨证施治的方法，调节人体的阴阳平衡，促进健康和预防疾病。</p>
+            </div>
+
+            <!-- 中医理论 -->
+            <div class="section content-block">
+                <h3>中医理论</h3>
+                <p>中医理论包括阴阳五行、脏腑经络等基本概念。阴阳五行理论解释了自然界和人体的基本运行规律，脏腑经络则描述了人体内部的器官功能及其相互关系。</p>
+            </div>
+
+            <!-- 常见治疗方法 -->
+            <div class="section content-block">
+                <h3>常见治疗方法</h3>
+                <p>中医常用的治疗方法包括针灸、推拿、草药、拔罐和艾灸等。这些方法通过刺激特定的穴位或使用天然药材，调节人体的功能，恢复健康。</p>
+            </div>
+
+            <!-- 中医药健康小贴士 -->
+            <div class="section content-block">
+                <h3>中医药健康小贴士</h3>
+                <ul>
+                    <li>保持良好的作息习惯，保证充足的睡眠。</li>
+                    <li>饮食要均衡，避免过度油腻和辛辣。</li>
+                    <li>定期进行适量的运动，如太极、瑜伽等。</li>
+                    <li>保持心情愉快，减少压力。</li>
+                </ul>
+            </div>
+
+            <!-- 互动问答 -->
+            <div class="section faq">
+                <h2>常见问题解答</h2>
+                <div class="faq-item">
+                    <h4>中医药如何调理体质？</h4>
+                    <p>中医药通过辨证施治，根据个人的体质特点，选择合适的草药和治疗方法，调整身体的阴阳平衡，增强体质。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>针灸的主要作用是什么？</h4>
+                    <p>针灸通过刺激人体特定的穴位，调节气血运行，缓解疼痛，改善功能障碍，促进身体自我修复。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>中医药适合哪些人群？</h4>
+                    <p>中医药适合各种年龄段的人群，特别是需要长期调理、预防疾病或希望通过自然疗法改善健康的人群。</p>
+                </div>
+                <div class="faq-item">
+                    <h4>如何选择适合自己的中药？</h4>
+                    <p>选择中药应根据个人的体质和健康状况，最好在专业中医师的指导下进行，以确保安全和有效。</p>
+                </div>
+            </div>
+        </div>
+        <!-- 新增内容结束 -->
+    </div>
+
+    <script>
+        // ============================
+        // 背景粒子特效相关代码
+        // ============================
+
+        // 定义粒子类
+        class Particle {
+            constructor(){
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update(){
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x < 0 || this.x > canvas.width){
+                    this.speedX = -this.speedX;
+                }
+                if(this.y < 0 || this.y > canvas.height){
+                    this.speedY = -this.speedY;
+                }
+            }
+            draw(){
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // 初始化变量
+        const canvas = document.getElementById('backgroundCanvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+
+        const numberOfParticles = 100;
+
+        // 初始化粒子
+        function init(){
+            particlesArray = [];
+            for(let i = 0; i < numberOfParticles; i++){
+                particlesArray.push(new Particle());
+            }
+        }
+
+        // 动画循环
+        function animate(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for(let i = 0; i < particlesArray.length; i++){
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // 调整画布大小并重新初始化粒子
+        function resizeCanvas(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        }
+
+        // 监听窗口大小变化
+        window.addEventListener('resize', resizeCanvas);
+
+        // 初始调用
+        resizeCanvas();
+        animate();
+
+        // ============================
+        // 轮播图功能
+        // ============================
+
+        let currentIndex = 0;
+        const slides = document.getElementById('slides');
+        const dots = document.getElementById('dots').getElementsByClassName('dot');
+        const carousel = document.getElementById('carousel');
+        const totalSlides = slides.children.length;
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        // 动态设置轮播图和图片宽度
+        function setCarouselWidth() {
+            const carouselWidth = carousel.clientWidth;
+            slides.style.width = `${totalSlides * 100}%`; // 设置slides容器宽度
+            for (let i = 0; i < slides.children.length; i++) {
+                slides.children[i].style.width = `${100 / totalSlides}%`; // 设置每张图片的宽度
+            }
+            showSlide(currentIndex); // 调整当前显示的幻灯片位置
+        }
+
+        // 初始化轮播图宽度
+        setCarouselWidth();
+
+        // 在窗口大小变化时重新设置宽度
+        window.addEventListener('resize', setCarouselWidth);
+
+        function showSlide(index) {
+            if(index >= totalSlides) { currentIndex = 0; }
+            else if(index < 0) { currentIndex = totalSlides -1; }
+            else { currentIndex = index; }
+            slides.style.transform = 'translateX(' + (-currentIndex * (100 / totalSlides)) + '%)';
+            updateDots();
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function currentSlide(index) {
+            showSlide(index);
+            resetInterval();
+        }
+
+        function updateDots() {
+            for(let i = 0; i < dots.length; i++){
+                dots[i].classList.remove('active');
+            }
+            dots[currentIndex].classList.add('active');
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        // ============================
+        // 头部滚动效果
+        // ============================
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if(window.scrollY > 50){
+                header.classList.add('scrolled');
+            } else{
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ============================
+        // 互动问答功能
+        // ============================
+
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+    </script>
+
+</body>
+</html>

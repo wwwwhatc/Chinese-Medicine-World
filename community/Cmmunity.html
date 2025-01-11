@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区互动专区</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 外部样式文件 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #6B8E23;
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .navbar .links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #6B8E23;
+            margin-bottom: 1rem;
+        }
+
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic {
+            background: #f0f0f0;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .topic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .topic h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .topic a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #6B8E23;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .topic a:hover {
+            background-color: #556B2F;
+        }
+
+        .post-form {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .post-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .post-form button {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #6B8E23;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .post-form button:hover {
+            background-color: #556B2F;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="title">社区互动专区</div>
+        <div class="links">
+            <a href="#">社区首页</a>
+            <a href="/Chinese-Medicine-World/home/home.html">返回首页</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>社区互动专区</h1>
+
+        <div class="section">
+            <h2>健康问题</h2>
+            <div class="topics">
+                <div class="topic">
+                    <h3>如何缓解失眠？</h3>
+                    <p>来自用户A的提问：最近经常失眠，有什么中医方法可以帮助睡眠？</p>
+                    <a href="#">查看详情</a>
+                </div>
+                <div class="topic">
+                    <h3>春季养生应该注意什么？</h3>
+                    <p>来自用户B的提问：春季养生有哪些推荐的药膳或方法？</p>
+                    <a href="#">查看详情</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>专题讨论</h2>
+            <div class="topics">
+                <div class="topic">
+                    <h3>中医减肥的成功案例</h3>
+                    <p>分享中医减肥的真实案例和经验。</p>
+                    <a href="#">参与讨论</a>
+                </div>
+                <div class="topic">
+                    <h3>冬季保健与养生</h3>
+                    <p>讨论如何通过中医方法在冬季保持健康。</p>
+                    <a href="#">参与讨论</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>经验分享与问答</h2>
+            <div class="topics">
+                <div class="topic">
+                    <h3>穴位按摩缓解头痛</h3>
+                    <p>用户分享通过按摩穴位缓解头痛的有效方法。</p>
+                    <a href="#">查看详情</a>
+                </div>
+                <div class="topic">
+                    <h3>常见中药材的副作用</h3>
+                    <p>讨论如何正确使用中药材避免副作用。</p>
+                    <a href="#">查看详情</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section post-form">
+            <h2>发布新话题</h2>
+            <form>
+                <textarea placeholder="输入您的健康问题或分享经验..."></textarea>
+                <button type="submit">发布</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <!-- 引入Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #6B8E23;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .navbar a:hover {
+            background-color: #556B2F;
+            border-radius: 5px;
+            transform: scale(1.05);
+        }
+
+        .navbar a i {
+            margin-right: 0.5rem;
+        }
+
+        /* 容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        /* 内容部分样式 */
+        .section {
+            flex: 1 1 45%;
+            min-width: 280px;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            color: #6B8E23;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2 i {
+            margin-right: 0.5rem;
+            color: #556B2F;
+        }
+
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .section ul li {
+            background: #f0f0f0;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .section ul li:hover {
+            background-color: #e6e6e6;
+            transform: translateX(5px);
+        }
+
+        .section ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section ul li a:hover {
+            color: #6B8E23;
+        }
+
+        .section ul li a i {
+            margin-right: 0.5rem;
+            color: #6B8E23;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .section {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* 按钮样式（可选） */
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #6B8E23;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #556B2F;
+            transform: scale(1.05);
+        }
+
+        /* 模态窗口样式 */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 2000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* 表单样式 */
+        .modal form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal form label {
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        .modal form input, .modal form select, .modal form textarea {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo"><i class="fas fa-user-circle"></i> 个人中心</div>
+        <div>
+            <a href="../home/home.html"><i class="fas fa-home"></i> 返回首页</a>
+        </div>
+    </nav>
+
+    <!-- 主体内容 -->
+    <div class="container">
+        <h1>欢迎来到您的个人中心</h1>
+
+        <div class="section">
+            <h2><i class="fas fa-id-badge"></i> 个人信息</h2>
+            <ul>
+                <li><a id="view-profile"><i class="fas fa-eye"></i> 查看个人信息</a></li>
+                <li><a id="edit-profile"><i class="fas fa-edit"></i> 编辑个人信息</a></li>
+                <li><a id="change-password"><i class="fas fa-lock"></i> 修改密码</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-heartbeat"></i> 健康档案</h2>
+            <ul>
+                <li><a id="view-health"><i class="fas fa-eye"></i> 查看健康档案</a></li>
+                <li><a id="update-health"><i class="fas fa-upload"></i> 更新健康档案</a></li>
+                <li><a id="health-stats"><i class="fas fa-chart-line"></i> 健康统计</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-comments"></i> 咨询记录</h2>
+            <ul>
+                <li><a id="view-consultations"><i class="fas fa-history"></i> 查看历史咨询记录</a></li>
+                <li><a id="book-consultation"><i class="fas fa-calendar-alt"></i> 预约新咨询</a></li>
+                <li><a id="consultation-report"><i class="fas fa-file-alt"></i> 咨询报告</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-bookmark"></i> 收藏内容</h2>
+            <ul>
+                <li><a id="view-favorites"><i class="fas fa-eye"></i> 查看收藏的文章</a></li>
+                <li><a id="manage-favorites"><i class="fas fa-edit"></i> 管理收藏内容</a></li>
+                <li><a id="share-favorites"><i class="fas fa-share"></i> 分享收藏内容</a></li>
+            </ul>
+        </div>
+
+        <!-- 额外演示内容 -->
+        <div class="section" style="flex: 1 1 100%;">
+            <h2><i class="fas fa-cog"></i> 设置</h2>
+            <ul>
+                <li><a id="language-preference"><i class="fas fa-language"></i> 语言偏好</a></li>
+                <li><a id="notification-settings"><i class="fas fa-notifications"></i> 通知设置</a></li>
+                <li><a id="privacy-settings"><i class="fas fa-privacy"></i> 隐私设置</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 模态窗口 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body">
+                <!-- 动态内容将插入到这里 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 功能实现 -->
+    <script>
+        // 获取元素
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-body');
+        const closeBtn = document.querySelector('.close');
+
+        // 打开模态窗口
+        function openModal(content) {
+            modalContent.innerHTML = content;
+            modal.style.display = 'block';
+        }
+
+        // 关闭模态窗口
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // 点击关闭按钮
+        closeBtn.onclick = closeModal;
+
+        // 点击窗口外部关闭
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // 返回首页链接已直接设置在HTML中，无需JavaScript处理
+
+        // 初始化用户数据
+        function initializeUserData() {
+            if(!localStorage.getItem('user')) {
+                const defaultUser = {
+                    username: '张三',
+                    email: 'zhangsan@example.com',
+                    phone: '13800000000',
+                    address: '北京市朝阳区',
+                    password: '123456',
+                };
+                localStorage.setItem('user', JSON.stringify(defaultUser));
+            }
+
+            if(!localStorage.getItem('healthRecords')) {
+                const defaultHealth = [
+                    { date: '2024-12-01', height: 175, weight: 70, bloodPressure: '120/80' },
+                    { date: '2024-12-15', height: 175, weight: 71, bloodPressure: '118/78' },
+                ];
+                localStorage.setItem('healthRecords', JSON.stringify(defaultHealth));
+            }
+
+            if(!localStorage.getItem('consultations')) {
+                const defaultConsultations = [
+                    { date: '2024-11-20', topic: '感冒症状', doctor: '李医生', notes: '建议多休息，喝水' },
+                    { date: '2024-12-05', topic: '血压管理', doctor: '王医生', notes: '调整饮食，定期测量' },
+                ];
+                localStorage.setItem('consultations', JSON.stringify(defaultConsultations));
+            }
+
+            if(!localStorage.getItem('favorites')) {
+                const defaultFavorites = [
+                    { title: '如何保持健康生活方式', link: '#' },
+                    { title: '高血压的预防与管理', link: '#' },
+                ];
+                localStorage.setItem('favorites', JSON.stringify(defaultFavorites));
+            }
+
+            if(!localStorage.getItem('settings')) {
+                const defaultSettings = {
+                    language: 'zh-CN',
+                    notifications: true,
+                    privacy: '公开',
+                };
+                localStorage.setItem('settings', JSON.stringify(defaultSettings));
+            }
+        }
+
+        // 查看个人信息
+        document.getElementById('view-profile').addEventListener('click', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const content = `
+                <h2><i class="fas fa-user"></i> 个人信息</h2>
+                <p><strong>用户名:</strong> ${user.username}</p>
+                <p><strong>邮箱:</strong> ${user.email}</p>
+                <p><strong>电话:</strong> ${user.phone}</p>
+                <p><strong>地址:</strong> ${user.address}</p>
+            `;
+            openModal(content);
+        });
+
+        // 编辑个人信息
+        document.getElementById('edit-profile').addEventListener('click', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const content = `
+                <h2><i class="fas fa-edit"></i> 编辑个人信息</h2>
+                <form id="edit-profile-form">
+                    <label for="username">用户名:</label>
+                    <input type="text" id="username" name="username" value="${user.username}" required>
+                    
+                    <label for="email">邮箱:</label>
+                    <input type="email" id="email" name="email" value="${user.email}" required>
+                    
+                    <label for="phone">电话:</label>
+                    <input type="tel" id="phone" name="phone" value="${user.phone}" required>
+                    
+                    <label for="address">地址:</label>
+                    <input type="text" id="address" name="address" value="${user.address}" required>
+                    
+                    <button type="submit" class="btn">保存</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const updatedUser = {
+                    username: e.target.username.value,
+                    email: e.target.email.value,
+                    phone: e.target.phone.value,
+                    address: e.target.address.value,
+                    password: user.password, // 保持密码不变
+                };
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                alert('个人信息已更新。');
+                closeModal();
+            });
+        });
+
+        // 修改密码
+        document.getElementById('change-password').addEventListener('click', () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const content = `
+                <h2><i class="fas fa-lock"></i> 修改密码</h2>
+                <form id="change-password-form">
+                    <label for="current-password">当前密码:</label>
+                    <input type="password" id="current-password" name="current-password" required>
+                    
+                    <label for="new-password">新密码:</label>
+                    <input type="password" id="new-password" name="new-password" required>
+                    
+                    <label for="confirm-password">确认新密码:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    
+                    <button type="submit" class="btn">修改密码</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('change-password-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const currentPassword = e.target['current-password'].value;
+                const newPassword = e.target['new-password'].value;
+                const confirmPassword = e.target['confirm-password'].value;
+
+                if(currentPassword !== user.password) {
+                    alert('当前密码不正确。');
+                    return;
+                }
+
+                if(newPassword !== confirmPassword) {
+                    alert('新密码和确认密码不一致。');
+                    return;
+                }
+
+                user.password = newPassword;
+                localStorage.setItem('user', JSON.stringify(user));
+                alert('密码已修改。');
+                closeModal();
+            });
+        });
+
+        // 查看健康档案
+        document.getElementById('view-health').addEventListener('click', () => {
+            const healthRecords = JSON.parse(localStorage.getItem('healthRecords'));
+            let recordsHTML = '<h2><i class="fas fa-eye"></i> 查看健康档案</h2><table border="1" cellpadding="10" cellspacing="0"><tr><th>日期</th><th>身高(cm)</th><th>体重(kg)</th><th>血压</th></tr>';
+            healthRecords.forEach(record => {
+                recordsHTML += `<tr><td>${record.date}</td><td>${record.height}</td><td>${record.weight}</td><td>${record.bloodPressure}</td></tr>`;
+            });
+            recordsHTML += '</table>';
+            openModal(recordsHTML);
+        });
+
+        // 更新健康档案
+        document.getElementById('update-health').addEventListener('click', () => {
+            const content = `
+                <h2><i class="fas fa-upload"></i> 更新健康档案</h2>
+                <form id="update-health-form">
+                    <label for="date">日期:</label>
+                    <input type="date" id="date" name="date" required>
+                    
+                    <label for="height">身高(cm):</label>
+                    <input type="number" id="height" name="height" required>
+                    
+                    <label for="weight">体重(kg):</label>
+                    <input type="number" id="weight" name="weight" required>
+                    
+                    <label for="bloodPressure">血压:</label>
+                    <input type="text" id="bloodPressure" name="bloodPressure" placeholder="如120/80" required>
+                    
+                    <button type="submit" class="btn">保存</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('update-health-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newRecord = {
+                    date: e.target.date.value,
+                    height: parseFloat(e.target.height.value),
+                    weight: parseFloat(e.target.weight.value),
+                    bloodPressure: e.target.bloodPressure.value,
+                };
+                const healthRecords = JSON.parse(localStorage.getItem('healthRecords'));
+                healthRecords.push(newRecord);
+                localStorage.setItem('healthRecords', JSON.stringify(healthRecords));
+                alert('健康档案已更新。');
+                closeModal();
+            });
+        });
+
+        // 健康统计
+        document.getElementById('health-stats').addEventListener('click', () => {
+            const healthRecords = JSON.parse(localStorage.getItem('healthRecords'));
+            if(healthRecords.length === 0) {
+                alert('暂无健康档案数据。');
+                return;
+            }
+
+            // 简单统计示例：计算平均体重
+            const totalWeight = healthRecords.reduce((sum, record) => sum + record.weight, 0);
+            const avgWeight = (totalWeight / healthRecords.length).toFixed(2);
+
+            const content = `
+                <h2><i class="fas fa-chart-line"></i> 健康统计</h2>
+                <p>您有 ${healthRecords.length} 条健康记录。</p>
+                <p>平均体重: ${avgWeight} kg</p>
+                <!-- 可以集成图表库如Chart.js来显示更复杂的统计数据 -->
+            `;
+            openModal(content);
+        });
+
+        // 查看咨询记录
+        document.getElementById('view-consultations').addEventListener('click', () => {
+            const consultations = JSON.parse(localStorage.getItem('consultations'));
+            let consultationsHTML = '<h2><i class="fas fa-history"></i> 历史咨询记录</h2><table border="1" cellpadding="10" cellspacing="0"><tr><th>日期</th><th>主题</th><th>医生</th><th>备注</th></tr>';
+            consultations.forEach(cons => {
+                consultationsHTML += `<tr><td>${cons.date}</td><td>${cons.topic}</td><td>${cons.doctor}</td><td>${cons.notes}</td></tr>`;
+            });
+            consultationsHTML += '</table>';
+            openModal(consultationsHTML);
+        });
+
+        // 预约新咨询
+        document.getElementById('book-consultation').addEventListener('click', () => {
+            const content = `
+                <h2><i class="fas fa-calendar-alt"></i> 预约新咨询</h2>
+                <form id="book-consultation-form">
+                    <label for="consultation-date">日期:</label>
+                    <input type="date" id="consultation-date" name="consultation-date" required>
+                    
+                    <label for="consultation-topic">主题:</label>
+                    <input type="text" id="consultation-topic" name="consultation-topic" required>
+                    
+                    <label for="consultation-doctor">医生:</label>
+                    <input type="text" id="consultation-doctor" name="consultation-doctor" required>
+                    
+                    <label for="consultation-notes">备注:</label>
+                    <textarea id="consultation-notes" name="consultation-notes" rows="4"></textarea>
+                    
+                    <button type="submit" class="btn">预约</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('book-consultation-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newConsultation = {
+                    date: e.target['consultation-date'].value,
+                    topic: e.target['consultation-topic'].value,
+                    doctor: e.target['consultation-doctor'].value,
+                    notes: e.target['consultation-notes'].value,
+                };
+                const consultations = JSON.parse(localStorage.getItem('consultations'));
+                consultations.push(newConsultation);
+                localStorage.setItem('consultations', JSON.stringify(consultations));
+                alert('咨询已预约。');
+                closeModal();
+            });
+        });
+
+        // 咨询报告
+        document.getElementById('consultation-report').addEventListener('click', () => {
+            const consultations = JSON.parse(localStorage.getItem('consultations'));
+            if(consultations.length === 0) {
+                alert('暂无咨询记录。');
+                return;
+            }
+
+            // 简单展示最近一次咨询报告
+            const latest = consultations[consultations.length -1];
+            const content = `
+                <h2><i class="fas fa-file-alt"></i> 咨询报告</h2>
+                <p><strong>日期:</strong> ${latest.date}</p>
+                <p><strong>主题:</strong> ${latest.topic}</p>
+                <p><strong>医生:</strong> ${latest.doctor}</p>
+                <p><strong>备注:</strong> ${latest.notes}</p>
+            `;
+            openModal(content);
+        });
+
+        // 查看收藏的文章
+        document.getElementById('view-favorites').addEventListener('click', () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites'));
+            if(favorites.length === 0) {
+                alert('暂无收藏内容。');
+                return;
+            }
+
+            let favoritesHTML = '<h2><i class="fas fa-eye"></i> 收藏的文章</h2><ul>';
+            favorites.forEach((fav, index) => {
+                favoritesHTML += `<li><a href="${fav.link}" target="_blank">${fav.title}</a></li>`;
+            });
+            favoritesHTML += '</ul>';
+            openModal(favoritesHTML);
+        });
+
+        // 管理收藏内容
+        document.getElementById('manage-favorites').addEventListener('click', () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites'));
+            let manageHTML = `
+                <h2><i class="fas fa-edit"></i> 管理收藏内容</h2>
+                <ul id="favorites-list">
+            `;
+            favorites.forEach((fav, index) => {
+                manageHTML += `
+                    <li>
+                        ${fav.title}
+                        <button data-index="${index}" class="btn delete-favorite">删除</button>
+                    </li>
+                `;
+            });
+            manageHTML += `
+                </ul>
+                <h3>添加新收藏</h3>
+                <form id="add-favorite-form">
+                    <label for="fav-title">标题:</label>
+                    <input type="text" id="fav-title" name="fav-title" required>
+                    
+                    <label for="fav-link">链接:</label>
+                    <input type="url" id="fav-link" name="fav-link" required>
+                    
+                    <button type="submit" class="btn">添加</button>
+                </form>
+            `;
+            openModal(manageHTML);
+
+            // 处理删除收藏
+            document.querySelectorAll('.delete-favorite').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    if(confirm('确定要删除此收藏吗？')) {
+                        favorites.splice(index, 1);
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        alert('收藏已删除。');
+                        // 重新加载管理界面
+                        closeModal();
+                        document.getElementById('manage-favorites').click();
+                    }
+                });
+            });
+
+            // 处理添加收藏
+            document.getElementById('add-favorite-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newFavorite = {
+                    title: e.target['fav-title'].value,
+                    link: e.target['fav-link'].value,
+                };
+                favorites.push(newFavorite);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('收藏已添加。');
+                closeModal();
+                document.getElementById('manage-favorites').click();
+            });
+        });
+
+        // 分享收藏内容
+        document.getElementById('share-favorites').addEventListener('click', () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites'));
+            if(favorites.length === 0) {
+                alert('暂无收藏内容可分享。');
+                return;
+            }
+
+            // 简单生成分享链接
+            const shareContent = favorites.map(fav => `${fav.title}: ${fav.link}`).join('\n');
+            const shareURL = `mailto:?subject=我的收藏内容&body=${encodeURIComponent(shareContent)}`;
+
+            window.location.href = shareURL;
+        });
+
+        // 语言偏好设置
+        document.getElementById('language-preference').addEventListener('click', () => {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            const content = `
+                <h2><i class="fas fa-language"></i> 语言偏好</h2>
+                <form id="language-form">
+                    <label for="language">选择语言:</label>
+                    <select id="language" name="language">
+                        <option value="zh-CN" ${settings.language === 'zh-CN' ? 'selected' : ''}>中文</option>
+                        <option value="en-US" ${settings.language === 'en-US' ? 'selected' : ''}>English</option>
+                    </select>
+                    <button type="submit" class="btn">保存</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('language-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                settings.language = e.target.language.value;
+                localStorage.setItem('settings', JSON.stringify(settings));
+                alert('语言偏好已保存。');
+                // 重新加载页面以应用语言变化（此处仅示例，实际需翻译内容）
+                closeModal();
+            });
+        });
+
+        // 通知设置
+        document.getElementById('notification-settings').addEventListener('click', () => {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            const content = `
+                <h2><i class="fas fa-notifications"></i> 通知设置</h2>
+                <form id="notification-form">
+                    <label for="notifications">启用通知:</label>
+                    <select id="notifications" name="notifications">
+                        <option value="true" ${settings.notifications ? 'selected' : ''}>是</option>
+                        <option value="false" ${!settings.notifications ? 'selected' : ''}>否</option>
+                    </select>
+                    <button type="submit" class="btn">保存</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('notification-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                settings.notifications = e.target.notifications.value === 'true';
+                localStorage.setItem('settings', JSON.stringify(settings));
+                alert('通知设置已保存。');
+                closeModal();
+            });
+        });
+
+        // 隐私设置
+        document.getElementById('privacy-settings').addEventListener('click', () => {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            const content = `
+                <h2><i class="fas fa-privacy"></i> 隐私设置</h2>
+                <form id="privacy-form">
+                    <label for="privacy">隐私级别:</label>
+                    <select id="privacy" name="privacy">
+                        <option value="公开" ${settings.privacy === '公开' ? 'selected' : ''}>公开</option>
+                        <option value="朋友" ${settings.privacy === '朋友' ? 'selected' : ''}>朋友</option>
+                        <option value="仅自己" ${settings.privacy === '仅自己' ? 'selected' : ''}>仅自己</option>
+                    </select>
+                    <button type="submit" class="btn">保存</button>
+                </form>
+            `;
+            openModal(content);
+
+            // 处理表单提交
+            document.getElementById('privacy-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                settings.privacy = e.target.privacy.value;
+                localStorage.setItem('settings', JSON.stringify(settings));
+                alert('隐私设置已保存。');
+                closeModal();
+            });
+        });
+
+        // 初始化数据
+        initializeUserData();
+
+    </script>
+</body>
+</html>
